@@ -50,17 +50,34 @@ while True:
                 a = 1
         elif (300 < mouse_x < 600) and (470 < mouse_y < 520):
             if mouse_press[0] == 1:
-                DISPLAYSURF.fill((255,255,255))
+                a = 2
         elif (60 < mouse_x < 100) and (10 < mouse_y < 50):
             if mouse_press[0] == 1:
-                DISPLAYSURF.fill((255,255,255))
+                a = 3
         elif (8 < mouse_x < 50) and (10 < mouse_y < 50):
             if mouse_press[0] == 1:
-                DISPLAYSURF.fill((255,255,255))
+                a = 4
     if a == 1: 
         DISPLAYSURF.fill((255,255,255))
         pygame.draw.polygon(DISPLAYSURF, BLACK, ((30, 45), (60, 60), (60, 25 )))
         if (30< mouse_x < 60) and (25 < mouse_y < 60):
             if mouse_press[0] == 1:
                 a = 0
-    pygame.display.update()
+    if a == 2:
+        DISPLAYSURF.fill((255,255,255))
+        pygame.draw.polygon(DISPLAYSURF, BLACK, ((30, 45), (60, 60), (60, 25 )))
+        if (30< mouse_x < 60) and (25 < mouse_y < 60):
+            if mouse_press[0] == 1:
+                a = 0
+    if a == 3:
+        DISPLAYSURF.fill((255,255,255))
+        pygame.draw.polygon(DISPLAYSURF, BLACK, ((30, 45), (60, 60), (60, 25 )))
+        if (30< mouse_x < 60) and (25 < mouse_y < 60):
+            if mouse_press[0] == 1:
+                a = 0
+    if a == 4:
+        DISPLAYSURF.fill((255,255,255))
+        pygame.draw.polygon(DISPLAYSURF, BLACK, ((30, 45), (60, 60), (60, 25 )))
+        if (30< mouse_x < 60) and (25 < mouse_y < 60):
+            if mouse_press[0] == 1:
+                a = 0
