@@ -6,7 +6,6 @@ HEIGHT = SQ_SIZE*13
 MAX_FPS = 15
 DIMENSION = 11
 TEXT = {}
-
 class GameState():
     def __init__(self):
         self.board = [
@@ -23,10 +22,9 @@ class GameState():
             ["J","-","-","-","-","-","-","-","-","-","-"]]
         self.firstpersonMove = True
         self.moveLog = []
-
 def main():
     p.init()
-    font = p.font.SysFont('consolas', 30)
+    font = p.font.SysFont('consolas', 50)
     screen = p.display.set_mode((WIDTH, HEIGHT))
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
@@ -46,12 +44,12 @@ def main():
 def loadText(font):
     pieces = ["1","2","3","4","5","6","7","8","9","10","A","B","C","D","E","F","G","H","I","J"]
     for piece in pieces:
-        TEXT[piece] = font.render(piece, True, (255,255,255))
+        TEXT[piece] = font.render(piece, True, (0,0,0))
 
 def drawGameState(screen, gs):
     drawBoard(screen)
     drawPieces(screen, gs.board,1)
-    #drawPieces(screen, gs.board,13)
+    drawPieces(screen, gs.board,13)
 
 def drawBoard(screen):
     color = p.Color("grey")
@@ -68,8 +66,7 @@ def drawPieces(screen, board,k):
         for c in range(DIMENSION):
             piece = board[r][c]
             if piece != "-":
-                screen.blit(TEXT[piece], ((c+k)*SQ_SIZE, (r+1)*SQ_SIZE))
-            #đánh dấu
+                screen.blit(TEXT[piece], p.Rect((c+k)*SQ_SIZE, (r+1)*SQ_SIZE,SQ_SIZE,SQ_SIZE))
 
 if __name__ == "__main__":
     main()
