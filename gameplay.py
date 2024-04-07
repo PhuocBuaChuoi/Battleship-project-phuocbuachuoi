@@ -1,4 +1,5 @@
 import pygame as p
+import time
 
 SQ_SIZE = 64
 WIDTH = SQ_SIZE*25
@@ -6,43 +7,76 @@ HEIGHT = SQ_SIZE*13
 MAX_FPS = 15
 DIMENSION = 11
 TEXT = {}
+a = time.time()
+checking = 0
+
+
 class GameState():
     def __init__(self):
         self.board = [
-            ["-","1","2","3","4","5","6","7","8","9","10"],
-            ["A","-","-","-","-","-","-","-","-","-","-"],
-            ["B","-","-","-","-","-","-","-","-","-","-"],
-            ["C","-","-","-","-","-","-","-","-","-","-"],
-            ["D","-","-","-","-","-","-","-","-","-","-"],
-            ["E","-","-","-","-","-","-","-","-","-","-"],
-            ["F","-","-","-","-","-","-","-","-","-","-"],
-            ["G","-","-","-","-","-","-","-","-","-","-"],
-            ["H","-","-","-","-","-","-","-","-","-","-"],
-            ["I","-","-","-","-","-","-","-","-","-","-"],
-            ["J","-","-","-","-","-","-","-","-","-","-"]]
+            ["-"," 1"," 2"," 3"," 4"," 5"," 6"," 7"," 8"," 9","10"],
+            [" A","-","-","-","-","-","-","-","-","-","-"],
+            [" B","-","-","-","-","-","-","-","-","-","-"],
+            [" C","-","-","-","-","-","-","-","-","-","-"],
+            [" D","-","-","-","-","-","-","-","-","-","-"],
+            [" E","-","-","-","-","-","-","-","-","-","-"],
+            [" F","-","-","-","-","-","-","-","-","-","-"],
+            [" G","-","-","-","-","-","-","-","-","-","-"],
+            [" H","-","-","-","-","-","-","-","-","-","-"],
+            [" I","-","-","-","-","-","-","-","-","-","-"],
+            [" J","-","-","-","-","-","-","-","-","-","-"]]
         self.firstpersonMove = True
         self.moveLog = []
 def main():
     p.init()
-    font = p.font.SysFont('consolas', 50)
+    font = p.font.SysFont('Sans', SQ_SIZE-8)
     screen = p.display.set_mode((WIDTH, HEIGHT))
     clock = p.time.Clock()
-    screen.fill(p.Color("white"))
     p.display.set_caption("WARSHIP")
     loadText(font)
     gs = GameState()
+    sqSelected = ()
+    playerClick = []
     running = True
     while running:
+        screen.fill(p.Color("white"))
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
+            elif e.type == p.MOUSEBUTTONDOWN:
+                location = p.mouse.get_pos()
+                col = location[0]//SQ_SIZE
+                row = location[1]//SQ_SIZE
+                if sqSelected == (row,col):
+                    sqSelected = ()
+                    playerClick = []
+                else:
+                    sqSelected = (row,col)
+                    playerClick.append(sqSelected)
+                if len(playerClick) == 2:
+                    pass
+
         drawGameState(screen, gs)
+        if checking == 0:
+            readymode(font,screen)
+            #danh dau
+        if checking == 1:
+            pass
         clock.tick(MAX_FPS)
         p.display.flip()
 
+def readymode(font,screen):
+    timing(60,font,screen)
+
+def settiming(secs):
+    return secs-(time.time()-a)
+
+def timing(secs,font,screen):
+    text_time = font.render(str(int(settiming(secs))), True, (0,0,0))
+    screen.blit(text_time, (12*SQ_SIZE,0))
 
 def loadText(font):
-    pieces = ["1","2","3","4","5","6","7","8","9","10","A","B","C","D","E","F","G","H","I","J"]
+    pieces = [" 1"," 2"," 3"," 4"," 5"," 6"," 7"," 8"," 9","10"," A"," B"," C"," D"," E"," F"," G"," H"," I"," J"]
     for piece in pieces:
         TEXT[piece] = font.render(piece, True, (0,0,0))
 
