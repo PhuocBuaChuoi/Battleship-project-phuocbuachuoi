@@ -10,7 +10,9 @@ TEXT = {}
 a = time.time()
 checking = 0
 sqSelected=()
-
+choose_piece={}
+clicking_session=0
+clicking_state=False
 class GameState():
     def __init__(self):
         self.board = [
@@ -30,6 +32,7 @@ class GameState():
 
 
 def main():
+    global clicking_session,clicking_state
     p.init()
     font = p.font.SysFont('Sans', SQ_SIZE - 8)
     screen = p.display.set_mode((WIDTH, HEIGHT))
@@ -46,20 +49,26 @@ def main():
             if e.type == p.QUIT:
                 running = False
             elif e.type == p.MOUSEBUTTONDOWN:
+                clicking_session+=1
+                clicking_state=True
+
+            elif e.type==p.MOUSEBUTTONUP:
+                clicking_state=False
+            if clicking_state:
                 location = p.mouse.get_pos()
                 col = location[0] // SQ_SIZE
                 row = location[1] // SQ_SIZE
-                if sqSelected!=(row,col):
-                    playerClick=[]
-                sqSelected = (row, col)
-                playerClick.append(sqSelected)
-                if len(playerClick) == 2:
-                    playerClick=[]
-                    sqSelected=()
+                if frozenset((row*100,col)) in choose_piece:
+                    if choose_piece[frozenset((row*100,col))]!=clicking_session:
+                        del choose_piece[frozenset((row*100,col))]
+                else:
+                    choose_piece[frozenset((row*100, col))]=clicking_session
+            #print(choose_piece,clicking_session,clicking_state)
 
         drawGameState(screen, gs,sqSelected)
         if checking == 0:
             readymode(font, screen)
+            # danh dau
         if checking == 1:
             pass
         clock.tick(MAX_FPS)
@@ -80,7 +89,8 @@ def timing(secs, font, screen):
 
 
 def loadText(font):
-    pieces = [" 1", " 2", " 3", " 4", " 5", " 6", " 7", " 8", " 9", "10", " A", " B", " C", " D", " E", " F", " G"," H", " I", " J"]
+    pieces = [" 1", " 2", " 3", " 4", " 5", " 6", " 7", " 8", " 9", "10", " A", " B", " C", " D", " E", " F", " G",
+              " H", " I", " J"]
     for piece in pieces:
         TEXT[piece] = font.render(piece, True, (0, 0, 0))
 
@@ -100,10 +110,10 @@ def drawBoard(screen,sqSelected):
 def Board(screen, color, k,sqSelected):
     for r in range(DIMENSION):
         for c in range(DIMENSION):
-            if len(sqSelected) != 0 and (r+k==sqSelected[0] and c+k==sqSelected[1]):
-                p.draw.rect(screen,color , p.Rect((c+k) * SQ_SIZE, (r+1) * SQ_SIZE, SQ_SIZE, SQ_SIZE), 0)
+            if frozenset(((r+k)*100,c+k)) in choose_piece:
+                p.draw.rect(screen,color , p.Rect((c + k) * SQ_SIZE, (r + 1) * SQ_SIZE, SQ_SIZE, SQ_SIZE), 0)
             else:
-                p.draw.rect(screen, color, p.Rect((c+k) * SQ_SIZE, (r+1) * SQ_SIZE, SQ_SIZE, SQ_SIZE), 1)
+                p.draw.rect(screen, color, p.Rect((c + k) * SQ_SIZE, (r + 1) * SQ_SIZE, SQ_SIZE, SQ_SIZE), 1)
 
 
 def drawPieces(screen, board, k):
@@ -111,7 +121,7 @@ def drawPieces(screen, board, k):
         for c in range(DIMENSION):
             piece = board[r][c]
             if piece != "-":
-                screen.blit(TEXT[piece], p.Rect((c+k) * SQ_SIZE, (r+1) * SQ_SIZE, SQ_SIZE, SQ_SIZE))
+                screen.blit(TEXT[piece], p.Rect((c + k) * SQ_SIZE, (r + 1) * SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
 
 if __name__ == "__main__":
